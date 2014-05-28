@@ -18,19 +18,23 @@
 63 66 04 68 89 53 67 30 73 16 69 87 40 31
 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23")
 
-(def pyramid-vector
+(defn str->vec [str]
   (reverse (mapv #(mapv (fn [x] (Integer. x)) (s/split % #" "))
-                 (s/split-lines pyramid-str))))
+                 (s/split-lines str))))
 
 (defn get-max-neighbor [coll]
   (map (partial apply max) (partition 2 1 coll)))
 
-(defn euler-18 []
-  (loop [remaining-nodes (rest pyramid-vector)
-         current-level (first pyramid-vector)]
+(defn get-answer [coll]
+  (loop [remaining-nodes (rest coll)
+         current-level (first coll)]
     (let [max-neighbor (get-max-neighbor current-level)
           next (map + max-neighbor (first remaining-nodes))]
       (if (= 1 (count remaining-nodes))
         (first next)
         (recur (rest remaining-nodes) next)))))
+
+(defn euler-18 []
+  (let [data (str->vec pyramid-str)]
+    (get-answer data)))
 
